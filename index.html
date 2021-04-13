@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Workday</title>
+	<style type="text/css">
+
+	body, html {
+		margin: 0;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	#container {
+  		display: inherit;
+	}
+
+	#clicks {
+  		position: fixed;
+  		bottom: 35px;
+  		right: 25px;
+  		font-size: 100px;
+  		font-family: sans-serif;
+	}
+
+	#timestamp-output {
+		position: fixed;
+  		top: 100px;
+  		margin-left: 20px;
+  		width: 200px;
+  		font-family: sans-serif;
+  		font-size: 18px;
+	}
+
+	.clock {
+		position: fixed;
+		top: 10px;
+		left: 10px;
+		font-size: 22px;
+		font-family: 'Pantasia', sans-serif;
+		z-index: 3;
+		font-variant-numeric: tabular-nums;
+	}
+
+		#until-tomorrow {
+		position: fixed;
+		filter: blur(1.2px);
+		top: 20px;
+		left: 30px;
+		font-size: 22px;
+/*		color: #b83400;*/
+		color: black;
+		font-family: 'Pantasia', sans-serif;
+/*		font-family: 'Helvetica', sans-serif;*/
+		z-index: 300;
+		font-variant-numeric: tabular-nums;
+	}
+
+	#video {
+	  	position: fixed;
+	  	right: 0;
+	  	bottom: 0;
+	  	width: 100%;
+	/*  height: 100%;*/
+	  	z-index: -1;
+	  	filter: grayscale(100%) blur(50px) contrast(200%) brightness(150%);
+	  	opacity: 0.6;
+	}
+
+/*	.bg {
+	  	background-image: url("xox_3.gif");
+	  	z-index: 1;
+	  	background-size: 100%;
+	  	width: 100%;
+	  	height: 100%;
+	  	position: fixed;
+	  	left: 0;
+	  	right: 0;
+	  	bottom: 0;
+	  	top: 0;
+	  	mix-blend-mode: multiply;
+	  	background-position: center;
+	  	background-repeat: no-repeat;
+	  	background-size: cover;
+	}*/
+
+	#text {
+		padding-top: 100px;
+/*	  	text-align: center;*/
+	  	color: black;
+	  	font-family: sans-serif;
+	  	font-size: 35px;
+	  	margin: auto;
+	  	letter-spacing: 1px;
+	}
+
+
+
+	#ten-images {
+	 	display: block;
+	  	margin: 5% auto; 
+		left: 0;
+		right: 0;
+	  	top: 60px;
+	  	position: fixed;
+	  	width: 60%;
+	/*  height: 80%;*/
+	/*  mix-blend-mode: multiply;*/
+	/*  opacity: 0.3;*/
+	}
+
+	#weather {
+		position: fixed;
+		filter: blur(1.2px);
+		top: 20px;
+		right: 30px;
+		font-size: 22px;
+		text-align: right;
+/*		color: #b83400;*/
+		color: black;
+		font-family: 'Pantasia', sans-serif;
+		z-index: 300;
+		font-variant-numeric: tabular-nums;
+
+		}
+
+
+/*	audio, embed {
+	    position: absolute;
+	    z-index: -9999;
+	}*/
+
+@font-face {
+  	font-family: 'Helvetica Mono';
+  	src:  url('assets/HelveticaMonospacedPro-Rg.woff2') format('woff2');
+}
+
+	</style>
+</head>
+<body>
+    <body>
+    	<div class="clock">Until Next Day <span id="hours" style="font-family:Pantasia"></span><span id="mins" style="font-family:Pantasia"></span><span id="secs" style="font-family:Pantasia"></span></div>
+    	<div id="container">
+    	<div class="timestamp">
+    	<div id="weather">Humidity: 76%<br>Wind: SSE 6.06 knots</div>
+<!--     	<div id="until-tomorrow">
+	<span id="sunset"></span>
+	<span id="sunrise"></span>
+	<span id="hours"></span>
+	<span id="mins"></span>
+	<span id="secs"></span>
+</div> -->
+	<video autoplay muted loop id="video">
+  		<source src="assets/film.mp4" type="video/mp4">
+		</video>
+
+	<audio id="audio" controls style="display:none">
+  		<source src="host6.mp3" type="audio/mpeg"> 
+		</audio>
+		<div id="text" style="width: 1250px;white-space: pre-line"></div>
+		<div id="timestamp-output" style="width: 1200px;white-space: pre-line"></div>
+		<div id="clicks" style="font-family:Helvetica Mono"></div>
+		<img id="ten-images" onClick="changeImage()"></div>
+		</div>
+		</div>
+	    </body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+// START AUDIO //////////////////////////////////////////////////////////
+
+document.addEventListener('keydown', function(e) {
+  if (e.keyCode == 13) {
+    document.getElementById('audio').play();
+  }
+});
+
+// MARK POSITION //////////////////////////////////////////////////////////
+
+window.onload = localStorage.clear();
+
+var clicks = 0;
+
+      $("html").addClass("mouse-position");
+      $(function(){
+        $(document).click(function(e){
+		  if (clicks <= 10) {
+		  	console.log(clicks);    
+
+	        var div = $('<div class="mouse-position">')
+	          .css({
+	            "left": e.pageX + 'px',
+	            "top": e.pageY + 'px',
+	            "color": 'blue',
+	            // "width": '100px',
+	            "position": 'absolute',
+	            "transform": 'translate(-50%, -50%)',
+	            "font-family": 'sans-serif',
+	            "font-size": '34px',
+	            "pointer-events": 'none',
+	          })
+	          .append($('<div class="mouse-position">' + 'x' + '</div>'))
+	          .appendTo(document.body);          
+	      }
+        });
+    });
+
+// CLICK COUNT //////////////////////////////////////////////////////////
+
+
+
+document.addEventListener("click", allClicks);
+
+function allClicks() {
+	onClick();
+	timeStamp();
+	changeImage();
+	}
+
+function onClick() {
+	console.log("click");
+    if (clicks >= 10) {
+    	var x = document.getElementById("container"); 
+		if (x && x.style) x.style.display = "none";  
+
+	function download(dataurl, filename) {
+  var a = document.createElement("a");
+  a.href = dataurl;
+  a.setAttribute("download", filename);
+  a.click();
+}
+
+// download("data:text/html,HelloWorld!", "helloWorld.txt");
+
+
+    }
+
+    clicks += 1;
+    document.getElementById("clicks").innerHTML = clicks;
+	};
+
+function timeStamp() {
+  	var n = event.timeStamp + "<br />";
+  	document.getElementById("timestamp-output").insertAdjacentHTML('beforeend', n);
+	}
+
+
+// var images = [
+//   "imgg2.png",
+//   "imgg1.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// "imgg3.png",
+// ]
+
+// var i = 0;
+
+// // function changeImage() {
+// //   if (clicks >= 10) return; 
+
+// //   else 
+// //   document.getElementById('ten-images').src = images[i];
+// //   i++;
+
+// // }
+
+// var tenImages = document.getElementById("ten-images");
+
+
+// function changeImage() {
+// document.getElementById('ten-images').src = images[i];
+//   i++;
+// }
+
+
+// CLOCK TIMER //////////////////////////////////////////////////////////
+
+    var countDownDate = new Date("Jun 01, 2021 01:00:00").getTime();
+    var myfunc = setInterval(function() {
+
+    var now = new Date().getTime();
+    var timeleft = countDownDate - now;
+        
+    var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+        
+    // Result is output to the specific element
+    	hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    document.getElementById("hours").innerHTML = hours + "h " 
+    document.getElementById("mins").innerHTML = minutes + "m " 
+    document.getElementById("secs").innerHTML = seconds + "s " 
+        
+    }, 100);
+
+// TYPEWRITER //////////////////////////////////////////////////////////
+
+</script>
+<script src="assets/core.js"></script>
+<script type="text/javascript">
+
+var app = document.getElementById('text');
+// setTimeout(function () {document.getElementById('text').style.display = "none";}, 88000);
+// setTimeout(function () {window.location.href = 'index3.html';}, 89000);
+
+
+var typewriter = new Typewriter(app, {
+    loop: true
+});
+
+typewriter
+	// .pauseFor(5000)
+	// .typeString('<span style="color:#fc7b03">Tryck Enter\n</span>')
+	.pauseFor(8000)
+	.typeString('Idag är det hopplöst att ta till tidigare etablerade dikotomier som fysiskt / digitalt, privat / offentligt, teknologiskt / analogt, interaktivt / statiskt – allt är allt hela tiden; ett uppkopplat virrvarr av flera miljarder noder som penetrerar smått och stort, som expanderar med en miljard miljard bytes varje dag. Istället för dikotomier använder vi allomfattande begrepp som “nätverk” eller komprimerade singulära metaforer som “molnet” i en förhoppning om att en enkelhet i beskrivningen gör det lättare att förstå dess komplexitet.\n')
+    .pauseFor(3000)
+    .typeString('<span style="color:#fc7b03">Molnigt, måttlig sikt.\n</span>')
+    .pauseFor(8000)
+    .typeString('Massiva mängder information avhumaniseras och abstraheras. Användarvänlighet innebär att det är lätt att få något att fungera, inte att det är lätt att förstå hur det fungerar.\n')
+    .pauseFor(2000)
+    .typeString('Våra interfaces förvandlas till prydliga rader av bilder och länkar genom a/b-tester som bestämmer var menyer och navigering ska sitta.\n')
+    .pauseFor(2000)
+    .typeString('<span style="color:#FFFFFF">Samtidigt som nätverken gömmer sig under lager av abstraktion lämnar vi synliga, konkreta spår efter oss.\n</span>')
+    // .pauseFor(2000)
+    // .typeString('Instead of making sentences we\n')
+    // .pauseFor(2000)
+    // .typeString('<span style="color:#fc7b03">Click</span>')
+    .pauseFor(10000000000000000000)
+    .start();
+
+</script>
+
+
+</body>
+</html>
